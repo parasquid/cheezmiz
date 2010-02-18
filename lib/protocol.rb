@@ -17,4 +17,18 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 $: << File.expand_path(File.dirname(__FILE__))
-require 'broker'
+
+%w{ message
+    connection_established
+    login
+    information
+    buddy
+    client_ready
+    submit
+    keep_alive
+    system_message
+    unknown_operation
+}.each { |lib| require "protocol/#{lib}" }
+
+module Cheezmiz
+end

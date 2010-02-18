@@ -17,4 +17,33 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 $: << File.expand_path(File.dirname(__FILE__))
-require 'broker'
+require 'message'
+
+module Cheezmiz
+  class LoginRequest < Message
+    def params_lut
+      {
+        :username => '005',
+        :password => '002',
+        :timezone => '004',
+        :window_size => '003'
+      }
+    end
+    
+    def operation_code
+      '01'
+    end
+
+    def default_params(params)
+      params[:timezone] ||= 8
+      params[:window_size] ||= 5 # 2..13
+      params
+    end
+  end
+
+  class LoginResponse < Message
+    def operation_code
+      '051'
+    end
+  end
+end

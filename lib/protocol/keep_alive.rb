@@ -17,4 +17,18 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 $: << File.expand_path(File.dirname(__FILE__))
-require 'broker'
+require 'message'
+
+module Cheezmiz
+  class KeepAliveRequest < Message
+    def operation_code
+      '40'
+    end
+  end
+
+  class KeepAliveResponse < Message
+    def operation_code
+      '90'
+    end
+  end
+end

@@ -17,4 +17,12 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 $: << File.expand_path(File.dirname(__FILE__))
-require 'broker'
+require 'message'
+
+module Cheezmiz
+  class ClientReady < Message
+    def operation_code
+      '89'
+    end
+  end
+end

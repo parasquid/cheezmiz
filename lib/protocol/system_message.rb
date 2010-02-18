@@ -17,4 +17,16 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 $: << File.expand_path(File.dirname(__FILE__))
-require 'broker'
+require 'message'
+
+module Cheezmiz
+  class SystemMessage < Message
+    def params_lut
+      { :message => '032' }
+    end
+    
+    def operation_code
+      '55'
+    end
+  end
+end

@@ -17,4 +17,33 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 $: << File.expand_path(File.dirname(__FILE__))
-require 'broker'
+require 'message'
+
+module Cheezmiz
+  class BuddyListRequest < Message
+    def params_lut
+    end
+    
+    def operation_code
+      '91'
+    end
+  end
+
+  class BuddyListBegin < Message
+    def params_lut
+    end
+
+    def operation_code
+      '30'
+    end
+  end
+
+   class BuddyListEnd < Message
+    def params_lut
+    end
+    
+    def operation_code
+      '39'
+    end
+  end
+end

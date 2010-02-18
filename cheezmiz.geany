@@ -1,0 +1,20 @@
+
+[indentation]
+indent_width=2
+indent_type=0
+indent_hard_tab_width=2
+detect_indent=false
+indent_mode=3
+
+[project]
+name=cheezmiz
+base_path=/home/kaliwanagan/projects/cheezmiz/
+make_in_base_path=false
+description=cheezmiz - a ruby library for Chikka
+run_cmd=
+
+[files]
+current_page=0
+FILE_NAME_0=5;Ruby;0;16;0;1;0;/home/kaliwanagan/projects/cheezmiz/lib/cheezmiz.rb;0
+FILE_NAME_1=113;Ruby;0;16;0;1;0;/home/kaliwanagan/projects/cheezmiz/lib/broker.rb;0
+FILE_NAME_2=987;Conf;0;16;0;1;0;/home/kaliwanagan/.config/geany/snippets.conf;0

@@ -17,4 +17,40 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 $: << File.expand_path(File.dirname(__FILE__))
-require 'broker'
+require 'message'
+
+module Cheezmiz
+  class SubmitRequest < Message
+    def params_lut
+      {
+        :message => '032',
+        :buddy_number => '021', # buddy list number
+        :origin => '023', # optional
+        :time_stamp => '022', # optional
+        :type => '030',
+        :msisdn => '001'
+      }
+    end
+    
+    def operation_code
+      '14'
+    end
+
+   def default_params(params)
+      params[:type] ||= 1 # pc or mobile?
+      params
+    end
+
+    def check_params(params)
+      if params.has_key?(:msisdn) && params.has_key?(:buddy_number)
+        raise 'msisdn and buddy_number cannot be both present'
+      end
+    end
+  end
+
+  class SubmitResponse < Message
+    def operation_code
+      '64'
+    end
+  end
+end
