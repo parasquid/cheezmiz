@@ -20,7 +20,7 @@ $: << File.expand_path(File.dirname(__FILE__) + '/../lib')
 require 'cheezmiz'
 
 if __FILE__ == $0
-  CHIKKA_USERNAME = 'ueser@email.com'
+  CHIKKA_USERNAME = 'user@email.com'
   CHIKKA_PASSWORD = 'password'
   TEST_MESSAGE = 'a test message'
 
@@ -81,5 +81,5 @@ if __FILE__ == $0
   socket = TCPSocket.open('ctp-a.chikka.com', 6301)
   broker.connect :socket => socket
   broker.start
-  broker.join
+  sleep
 end

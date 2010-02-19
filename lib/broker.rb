@@ -17,6 +17,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 $: << File.expand_path(File.dirname(__FILE__))
+require 'actionpool'
 require 'socket'
 require 'helper'
 require 'protocol'
@@ -25,9 +26,15 @@ module Cheezmiz
   class Broker
     STX = "\x02"
     ETX = "\x03"
-    def initialize()
+    MIN_THREADS = 5
+    MAX_THREADS = 15
+    def initialize(params = {})
       @sequence_number = 1
       @callbacks = Hash.new { |hash, key| hash[key] = [] }
+      @pool = ActionPool::Pool.new(
+        :min_threads => (params[:min_threads] || MIN_THREADS),
+        :max_threads => (params[:max_threads] || MAX_THREADS)
+      )
     end
     
     def register_callback(operation, &proc)
@@ -62,7 +69,7 @@ module Cheezmiz
     end
 
     def start
-      @thread = Thread.new do
+      @pool.process do
         @socket.while_reading { |buffer| process_messages(buffer) }
       end
     end
