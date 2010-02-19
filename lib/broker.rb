@@ -73,10 +73,6 @@ module Cheezmiz
         @socket.while_reading { |buffer| process_messages(buffer) }
       end
     end
-    
-    def join
-      @thread.join
-    end
 
   private
 
@@ -97,8 +93,8 @@ module Cheezmiz
     def encode(options)
       raw = "#{STX}" + options[:message].prototype
       sequence_number = begin
-        options[:response_to].sequence_number
-      rescue NoMethodError
+        options[:response_to].respond_to?(:sequence_number) ?
+        options[:response_to].sequence_number :
         options[:response_to]
       end || @sequence_number
       raw.sub! /NNN/, sequence_number.to_s.rjust(3, '0')
@@ -116,14 +112,13 @@ module Cheezmiz
     end
     
     def process_callbacks(callbacks, message)
-      if callbacks.respond_to? :each_pair
-        callbacks[message.operation].each do |callback|
-          callback.call(message) 
+      @pool.process do
+        for_processing = begin
+          callbacks.respond_to?(:each_pair) ?
+          callbacks[message.operation] :
+          callbacks
         end
-      else
-        callbacks.each do |callback|
-          callback.call(message)
-        end
+        for_processing.each { |callback| callback.call(message) }
       end
     end
   end
