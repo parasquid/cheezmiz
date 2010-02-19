@@ -25,12 +25,7 @@ module Cheezmiz
   class Broker
     STX = "\x02"
     ETX = "\x03"
-    def initialize(params = {})
-      @socket = params[:socket] || begin
-        params[:host] ||= 'ctp-a.chikka.com'
-        params[:port] ||= 6301
-        TCPSocket.open(params[:host], params[:port])
-      end
+    def initialize()
       @sequence_number = 1
       @callbacks = Hash.new { |hash, key| hash[key] = [] }
     end
@@ -58,6 +53,14 @@ module Cheezmiz
       return raw, result
     end
        
+    def connect(params = {})
+      @socket = params[:socket] || begin
+        params[:host] ||= 'ctp-a.chikka.com'
+        params[:port] ||= 6301
+        TCPSocket.open(params[:host], params[:port])
+      end
+    end
+
     def start
       @thread = Thread.new do
         @socket.while_reading { |buffer| process_messages(buffer) }

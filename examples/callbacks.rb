@@ -20,12 +20,11 @@ $: << File.expand_path(File.dirname(__FILE__) + '/../lib')
 require 'cheezmiz'
 
 if __FILE__ == $0
-  CHIKKA_USERNAME = 'user@email.com'
+  CHIKKA_USERNAME = 'ueser@email.com'
   CHIKKA_PASSWORD = 'password'
   TEST_MESSAGE = 'a test message'
 
-  socket = TCPSocket.open('ctp-a.chikka.com', 6301)
-  broker = Cheezmiz::Broker.new :socket => socket
+  broker = Cheezmiz::Broker.new
   broker.register_callback(:connection_established) do |msg|
     puts 'connection has been established'
     message = Cheezmiz::LoginRequest.new(
@@ -71,14 +70,16 @@ if __FILE__ == $0
     if msg.operation == :unknown_operation
       puts "unknown operation: #{msg.prototype}"
     else
-      puts "incoming message #{msg.operation} #{msg.data_fields.inspect}"
+      puts "incoming message: #{msg.operation} #{msg.data_fields.inspect}"
     end
   end
 
   broker.register_callback(:outgoing) do |msg|
     puts "outgoing message: #{msg.operation} #{msg.data_fields.inspect}"
   end
-  
+
+  socket = TCPSocket.open('ctp-a.chikka.com', 6301)
+  broker.connect :socket => socket
   broker.start
   broker.join
 end
