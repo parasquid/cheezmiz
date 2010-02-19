@@ -37,22 +37,14 @@ module Cheezmiz
       )
     end
     
-    def register_callback(operation, &proc)
-      @callbacks[operation] << proc
+    def register_callback(operation, options = {:threaded => true}, &proc)
+      @callbacks[operation] << options.merge({ :callback => proc })
     end
     
-    def register_observer(observer, &proc)
-      @observers[observer] << proc
-    end
-
     def callbacks
       @callbacks
     end
  
-    def observers
-      @observers
-    end
-
    def send(message, params = {})
       raw = encode({ :message => message }.merge(params))
       result = @socket.send(raw, 0)
@@ -112,13 +104,14 @@ module Cheezmiz
     end
     
     def process_callbacks(callbacks, message)
-      @pool.process do
-        for_processing = begin
-          callbacks.respond_to?(:each_pair) ?
-          callbacks[message.operation] :
-          callbacks
-        end
-        for_processing.each { |callback| callback.call(message) }
+      (begin
+        callbacks.respond_to?(:each_pair) ?
+        callbacks[message.operation] :
+        callbacks
+      end).each do |callback|
+        callback[:threaded] ?
+        @pool.process { callback[:callback].call(message) } :
+        callback[:callback].call(message)
       end
     end
   end

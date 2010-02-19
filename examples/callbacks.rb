@@ -52,14 +52,14 @@ if __FILE__ == $0
     broker.send(Cheezmiz::ClientReady.new)
   end
 
-  broker.register_callback(:keep_alive_request) do |msg|
+  broker.register_callback(:keep_alive_request, :threaded => false) do |msg|
     broker.send(Cheezmiz::KeepAliveResponse.new, :response_to => msg)
     puts 'sending test message'
     message = Cheezmiz::SubmitRequest.new(
       :message => "#{TEST_MESSAGE}",
       :buddy_number => 0
     )
-    broker.send(message)
+    #broker.send(message)
   end
 
   broker.register_callback(:submit_response) do

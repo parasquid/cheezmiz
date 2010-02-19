@@ -69,9 +69,7 @@ module Cheezmiz
 
     def data
       data = ''
-      @options.each do |key, value|
-        data << "#{key}:#{value}\t"
-      end
+      @options.each { |key, value| data << "#{key}:#{value}\t" }
       data
     end
 
